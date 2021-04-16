@@ -23,7 +23,7 @@ services:
     environment:
       GF_PATHS_PROVISIONING: /etc/grafana/provisioning/
     ports:
-      - 3300:3000
+      - 3000:3000
     networks:
       - subnet_0
     restart: on-failure

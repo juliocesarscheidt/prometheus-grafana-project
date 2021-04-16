@@ -9,6 +9,8 @@ Also there is a Grafana container that will use Prometheus as datasource and cre
 docker-compose up -d
 ```
 
+Then access Grafana on: <http://localhost:3000>
+
 ## Testing
 
 ```bash
