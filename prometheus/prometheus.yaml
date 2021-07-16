@@ -7,6 +7,10 @@ scrape_configs:
     - targets:
       - localhost:9090
 
+    basic_auth:
+      username: admin
+      password: admin
+
   - job_name: api
     static_configs:
     - targets:

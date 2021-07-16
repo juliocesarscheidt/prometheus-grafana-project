@@ -4,7 +4,10 @@ services:
   prometheus:
     container_name: prometheus
     image: prom/prometheus:latest
-    command: ["--config.file=/prometheus-config/prometheus.yaml"]
+    command: [
+      "--config.file=/prometheus-config/prometheus.yaml",
+      "--web.config.file=/prometheus-config/web.yaml"
+    ]
     volumes:
       - ./prometheus/:/prometheus-config
       - prometheus-data:/prometheus
@@ -41,6 +44,9 @@ services:
 networks:
   subnet_0:
     driver: bridge
+    ipam:
+      config:
+        - subnet: "172.18.0.0/24"
 
 volumes:
   prometheus-data: {}

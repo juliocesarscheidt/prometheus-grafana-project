@@ -11,6 +11,9 @@ docker-compose up -d
 
 Then access Grafana on: <http://localhost:3000>
 
+> Grafana default user: admin/admin
+> Prometheus default user: admin/admin
+
 ## Testing
 
 ```bash
@@ -26,7 +29,13 @@ curl --silent http://localhost:9000/metrics \
 # custom_request_healthcheck_counter 0
 
 # incrementing the counter of this custom metric by calling the healthcheck endpoint
-curl --silent http://localhost:9000/healthcheck
+declare -i COUNTER
+let "COUNTER+=0"
+while true; do
+  test $COUNTER -ge 50 && break
+  curl --silent "http://localhost:9000/healthcheck"
+  let "COUNTER+=1"
+done
 
 # and then calling metrics of the API again
 curl --silent http://localhost:9000/metrics \
