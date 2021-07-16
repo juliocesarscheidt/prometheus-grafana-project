@@ -12,6 +12,7 @@ docker-compose up -d
 Then access Grafana on: <http://localhost:3000>
 
 > Grafana default user: admin/admin
+
 > Prometheus default user: admin/admin
 
 > Generate encrypted password
@@ -51,5 +52,5 @@ done
 # and then calling metrics of the API again
 curl --silent http://localhost:9000/metrics \
   | grep custom_request_healthcheck_counter
-# custom_request_healthcheck_counter 1
+# custom_request_healthcheck_counter 50
 ```
