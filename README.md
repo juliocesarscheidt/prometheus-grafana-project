@@ -14,6 +14,17 @@ Then access Grafana on: <http://localhost:3000>
 > Grafana default user: admin/admin
 > Prometheus default user: admin/admin
 
+> Generate encrypted password
+
+```bash
+htpasswd -nb -B admin admin
+admin:$2y$05$aShml8bxjrquQLKe0H6VE.M2lG4nVjasrYheS2LOukWOV0zTlPcSS
+# used options:
+-n  Don't update file; display results on stdout.
+-m  Force MD5 encryption of the password (default).
+-B  Force bcrypt encryption of the password (very secure)
+```
+
 ## Testing
 
 ```bash
