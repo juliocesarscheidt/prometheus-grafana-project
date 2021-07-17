@@ -30,7 +30,10 @@ admin:$2y$05$aShml8bxjrquQLKe0H6VE.M2lG4nVjasrYheS2LOukWOV0zTlPcSS
 
 ```bash
 # calling prometheus API directly
-curl --silent http://localhost:9090/metrics
+AUTH="$(echo -n 'admin:admin' | base64 -w0)"
+curl --silent -H "Authorization: Basic ${AUTH}" \
+  http://localhost:9090/metrics
+
 
 # calling metrics of the API which is using prometheus client
 curl --silent http://localhost:9000/metrics
@@ -48,6 +51,7 @@ while true; do
   curl --silent "http://localhost:9000/healthcheck"
   let "COUNTER+=1"
 done
+
 
 # and then calling metrics of the API again
 curl --silent http://localhost:9000/metrics \
