@@ -45,7 +45,7 @@ curl --silent http://localhost:9000/metrics \
 
 # incrementing the counter of this custom metric by calling the healthcheck endpoint
 declare -i COUNTER
-let "COUNTER+=0"
+let "COUNTER=0"
 while true; do
   test $COUNTER -ge 50 && break
   curl --silent "http://localhost:9000/healthcheck"
