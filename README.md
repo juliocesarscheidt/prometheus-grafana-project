@@ -40,8 +40,8 @@ curl --silent http://localhost:9000/metrics
 
 # calling metrics of the API searching for the custom metric
 curl --silent http://localhost:9000/metrics \
-  | grep custom_request_healthcheck_counter
-# custom_request_healthcheck_counter 0
+  | grep http_request_healthcheck_count
+# http_request_healthcheck_count 0
 
 # incrementing the counter of this custom metric by calling the healthcheck endpoint
 declare -i COUNTER
@@ -55,6 +55,6 @@ done
 
 # and then calling metrics of the API again
 curl --silent http://localhost:9000/metrics \
-  | grep custom_request_healthcheck_counter
-# custom_request_healthcheck_counter 50
+  | grep http_request_healthcheck_count
+# http_request_healthcheck_count 50
 ```

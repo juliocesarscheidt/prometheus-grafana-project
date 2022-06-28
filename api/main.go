@@ -1,20 +1,40 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"time"
+	"math/rand"
 	"net/http"
+	"encoding/json"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
-	requestsHealthcheckCounter = prometheus.NewCounter(prometheus.CounterOpts{
-		Subsystem: "custom",
-		Name: "custom_request_healthcheck_counter",
-		Help: "The total number of requests made to healthcheck endpoint",
-	})
+	healthcheckEndpointCounter = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Subsystem: "custom",
+			Name:      "http_request_healthcheck_count",
+			Help:      "The total number of requests made to healthcheck endpoint",
+		},
+		[]string{"status"},
+	)
+
+	healthcheckEndpointLatency = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Subsystem: "custom",
+			Name: "http_request_healthcheck_duration_seconds",
+			Help: "Latency of healthcheck endpoint requests in seconds",
+		},
+		[]string{"status"},
+	)
 )
+
+func init() {
+	// must register counter on init
+	prometheus.MustRegister(healthcheckEndpointCounter)
+	prometheus.MustRegister(healthcheckEndpointLatency)
+}
 
 func buildJSONResponse(statusCode int, message string) ([]byte, error) {
 	var responseHTTP = make(map[string]interface{})
@@ -34,19 +54,34 @@ func returnHTTPResponse(statusCode int, message string) http.HandlerFunc {
 	return func(writter http.ResponseWriter, req *http.Request) {
 		responseJSONBytes, _ := buildJSONResponse(statusCode, message)
 
-		requestsHealthcheckCounter.Inc()
+		var status string
+		// counter for prometheus
+		defer func() {
+			healthcheckEndpointCounter.WithLabelValues(status).Inc()
+		}()
+		// latency timer for prometheus
+		timer := prometheus.NewTimer(prometheus.ObserverFunc(func(_time float64) {
+			healthcheckEndpointLatency.WithLabelValues(status).Observe(_time)
+		}))
+		defer func() {
+			timer.ObserveDuration()
+		}()
+
+		// sleep from 0 to 2 secs randomly
+		duration := (rand.Intn(2 - 0) + 0)
+		time.Sleep(time.Duration(duration) * time.Second)
 
 		writter.Header().Set("Content-Type", "application/json")
 		writter.WriteHeader(statusCode)
+
+		status = "success"
+
 		writter.Write(responseJSONBytes)
 	}
 }
 
 func main() {
 	addr := "0.0.0.0:9000"
-
-	// register counter
-	prometheus.Register(requestsHealthcheckCounter)
 
 	// endpoint for healthcheck
 	http.HandleFunc("/healthcheck", returnHTTPResponse(http.StatusOK, "OK"))

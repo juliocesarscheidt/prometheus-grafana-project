@@ -29,8 +29,12 @@ datasources:
   basicAuth: true
   # <string> basic auth username
   basicAuthUser: admin
-  # <string> basic auth password
-  basicAuthPassword: admin
+  secureJsonData:
+    # <string> basic auth password
+    basicAuthPassword: admin
+    tlsCACert: "..."
+    tlsClientCert: "..."
+    tlsClientKey: "..."
   # <bool> enable/disable with credentials headers
   withCredentials:
   # <bool> mark as default datasource. Max one per org
@@ -40,11 +44,6 @@ datasources:
     graphiteVersion: "1.1"
     tlsAuth: false
     tlsAuthWithCACert: false
-# <string> json object of data that will be encrypted.
-  secureJsonData:
-    tlsCACert: "..."
-    tlsClientCert: "..."
-    tlsClientKey: "..."
   version: 1
   # <bool> allow users to edit datasources from the UI.
   editable: true

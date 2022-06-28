@@ -65,7 +65,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "custom_custom_request_healthcheck_counter",
+          "expr": "custom_http_request_healthcheck_count",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -206,6 +206,84 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{
+              "color": "green",
+              "value": null
+            }, {
+              "color": "red",
+              "value": 80
+            }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [{
+        "exemplar": false,
+        "expr": "rate(custom_http_request_healthcheck_duration_seconds_sum{status=\"success\"}[1m]) / rate(custom_http_request_healthcheck_duration_seconds_count{status=\"success\"}[1m])",
+        "instant": false,
+        "legendFormat": "__auto",
+        "range": true,
+        "refId": "A"
+      }],
+      "title": "Average API Latency",
+      "type": "timeseries"
     }
   ],
   "schemaVersion": 27,
