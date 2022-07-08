@@ -40,6 +40,11 @@ services:
     networks:
       - subnet_0
     restart: on-failure
+    # healthcheck:
+    #   test: "curl -sS http://api:9000/healthcheck"
+    #   interval: 10s
+    #   timeout: 30s
+    #   retries: 60
 
 networks:
   subnet_0:
